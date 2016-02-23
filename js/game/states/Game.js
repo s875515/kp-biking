@@ -1,17 +1,19 @@
 KpBiking.Game = function() {
   this.playerMinAngle = -20;
   this.playerMaxAngle = 20;
+  this.coinRate = 1000;
+  this.coinTimer = 0;
 };
 
 KpBiking.Game.prototype = {
   create: function() {
-    // this.background = this.game.add.tileSprite(0, 0, this.game.width, 512, 'background');
-    // this.background.autoScroll(-100, 0);
+    this.background = this.game.add.tileSprite(0, -100, this.game.width, 732, 'background');
+    this.background.autoScroll(-100, 0);
     //
     // this.foreground = this.game.add.tileSprite(0, 470, this.game.width, this.game.height - 533, 'foreground');
     // this.foreground.autoScroll(-100 ,0);
 
-    this.ground = this.game.add.tileSprite(0, this.game.height - 73, this.game.width, 73, 'ground');
+    this.ground = this.game.add.tileSprite(0, this.game.height - 73, this.game.width, 0, 'ground');
     this.ground.autoScroll(-300, 0);
 
     this.player = this.add.sprite(200, this.game.height/2, 'player')
@@ -31,6 +33,9 @@ KpBiking.Game.prototype = {
     this.game.physics.arcade.enableBody(this.player);
     this.player.body.collideWorldBounds = true; //邊界
     this.player.body.bounce.set(0.25); //掉到下面之後會彈跳
+
+    this.coins = this.game.add.group();
+
   },
   update: function() {
     if(this.game.input.activePointer.isDown) {
@@ -50,10 +55,28 @@ KpBiking.Game.prototype = {
       }
     }
 
+    if(this.coinTimer < this.game.time.now) {
+      this.createCoin();
+      this.coinTimer = this.game.time.now + this.coinRate;
+    }
+
     this.game.physics.arcade.collide(this.player, this.ground, this.groundHit, null, this); //邊界碰撞
   },
   shutdown: function() {
 
+  },
+  createCoin: function() {
+    var x = this.game.width;
+    var y = this.game.rnd.integerInRange(50, this.game.world.height - 192);
+
+    var coin = this.coins.getFirstExists(false);
+    if(!coin) {
+      coin = new Coin(this.game, 0, 0);
+      this.coins.add(coin);
+    }
+
+    coin.reset(x, y);
+    coin.revive();
   },
   groundHit: function(player, ground) {
     player.body.velocity.y = -200;
