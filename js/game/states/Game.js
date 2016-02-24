@@ -1,8 +1,12 @@
 KpBiking.Game = function() {
   this.playerMinAngle = -20;
   this.playerMaxAngle = 20;
+
   this.coinRate = 1000;
   this.coinTimer = 0;
+
+  this.enemyRate = 500;
+  this.enemyTimer = 0;
 };
 
 KpBiking.Game.prototype = {
@@ -35,6 +39,7 @@ KpBiking.Game.prototype = {
     this.player.body.bounce.set(0.25); //掉到下面之後會彈跳
 
     this.coins = this.game.add.group();
+    this.enemies = this.game.add.group();
 
   },
   update: function() {
@@ -60,6 +65,11 @@ KpBiking.Game.prototype = {
       this.coinTimer = this.game.time.now + this.coinRate;
     }
 
+    if(this.enemyTimer < this.game.time.now) {
+      this.createEnemy();
+      this.enemyTimer = this.game.time.now + this.enemyRate;
+    }
+
     this.game.physics.arcade.collide(this.player, this.ground, this.groundHit, null, this); //邊界碰撞
   },
   shutdown: function() {
@@ -77,6 +87,19 @@ KpBiking.Game.prototype = {
 
     coin.reset(x, y);
     coin.revive();
+  },
+  createEnemy: function() {
+    var x = this.game.width;
+    var y = this.game.rnd.integerInRange(50, this.game.world.height - 192);
+
+    var enemy = this.enemies.getFirstExists(false);
+    if(!enemy) {
+      enemy = new Enemy(this.game, 0, 0);
+      this.enemies.add(enemy);
+    }
+
+    enemy.reset(x, y);
+    enemy.revive();
   },
   groundHit: function(player, ground) {
     player.body.velocity.y = -200;

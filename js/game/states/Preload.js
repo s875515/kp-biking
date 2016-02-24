@@ -15,11 +15,11 @@ KpBiking.Preload.prototype = {
 
     this.load.image('ground', 'assets/images/ground1.jpg');
     this.load.image('background', 'assets/images/background1.jpg');
-    this.load.image('foreground', 'assets/images/foreground.png');
+    // this.load.image('foreground', 'assets/images/foreground.png');
 
-    this.load.spritesheet('coins', 'assets/images/coins-ps.png', 51, 51, 7);
+    this.load.spritesheet('coins', 'assets/images/coin.png', 51, 51, 1);
     this.load.spritesheet('player', 'assets/kp.png', 200, 188);
-    this.load.spritesheet('missile', 'assets/images/missiles-ps.png', 361, 218, 4);
+    this.load.spritesheet('stone', 'assets/images/stone.png', 361, 218, 1);
 
     this.load.audio('gameMusic', ['assets/audio/Pamgaea.mp3', 'assets/audio/Pamgaea.ogg']);
     this.load.audio('rocket', 'assets/audio/rocket.wav');
