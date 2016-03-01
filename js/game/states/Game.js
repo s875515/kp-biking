@@ -7,6 +7,8 @@ KpBiking.Game = function() {
 
   this.enemyRate = 500;
   this.enemyTimer = 0;
+
+  this.score = 0;
 };
 
 KpBiking.Game.prototype = {
@@ -41,6 +43,8 @@ KpBiking.Game.prototype = {
     this.coins = this.game.add.group();
     this.enemies = this.game.add.group();
 
+    this.scoreText = this.game.add.bitmapText(10,10, 'minecraftia', 'Banana: 0', 24);
+
   },
   update: function() {
     if(this.game.input.activePointer.isDown) {
@@ -71,6 +75,9 @@ KpBiking.Game.prototype = {
     }
 
     this.game.physics.arcade.collide(this.player, this.ground, this.groundHit, null, this); //邊界碰撞
+    this.game.physics.arcade.overlap(this.player, this.coins, this.coinHit, null, this); //得到coin
+    this.game.physics.arcade.overlap(this.player, this.enemies, this.enemyHit, null, this); //得到coin
+
   },
   shutdown: function() {
 
@@ -103,5 +110,26 @@ KpBiking.Game.prototype = {
   },
   groundHit: function(player, ground) {
     player.body.velocity.y = -200;
+  },
+  coinHit: function(player, coin) {
+    this.score++;
+    coin.kill();
+    this.scoreText.text = 'Banana: ' + this.score;
+  },
+  enemyHit: function(player, enemy) {
+    player.kill();
+    enemy.kill();
+
+    this.ground.stopScroll();
+    this.background.stopScroll();
+
+    this.enemies.setAll('body.velocity.x', 0);
+    this.coins.setAll('body.velocity.x', 0);
+
+    this.enemyTimer = Number.MAX_VALUE;
+    this.coinTimer = Number.MAX_VALUE;
+
+    var scoreboard = new Scoreboard(this.game);
+    scoreboard.show(this.score);
   }
 };

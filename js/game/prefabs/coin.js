@@ -2,8 +2,8 @@ var Coin = function(game, x, y, key, frame) {
   key = 'coins';
   Phaser.Sprite.call(this, game, x, y, key, frame);
 
-  this.scale.setTo(0.5);
-  this.anchor.setTo(0.5);
+  this.scale.setTo(0.8);
+  this.anchor.setTo(1);
 
   this.animations.add('spin');
 
