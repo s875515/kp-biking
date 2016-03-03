@@ -76,11 +76,15 @@ KpBiking.Game.prototype = {
 
     this.game.physics.arcade.collide(this.player, this.ground, this.groundHit, null, this); //邊界碰撞
     this.game.physics.arcade.overlap(this.player, this.coins, this.coinHit, null, this); //得到coin
-    this.game.physics.arcade.overlap(this.player, this.enemies, this.enemyHit, null, this); //得到coin
+    this.game.physics.arcade.overlap(this.player, this.enemies, this.enemyHit, null, this); //撞到enemy
 
   },
   shutdown: function() {
-
+    this.coins.destroy();
+    this.enemies.destroy();
+    this.score = 0;
+    this.coinTimer = 0;
+    this.enemyTimer = 0;
   },
   createCoin: function() {
     var x = this.game.width;
